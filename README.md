@@ -13,7 +13,7 @@ The module provides the following features:
 
 * `DatabaseUnavailable` error extra properties (`address` and `port`) have been moved to the VError's `info` constructor option, so it can be accessed via the static method `VError.info(err)`.
 
-V1 documentation is available [here]().
+V1 documentation is available [here](https://github.com/AlexeyGorokhov/pgpw/blob/master/docs_archive/v1.md).
 
 ## Installation
 
