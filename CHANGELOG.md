@@ -1,9 +1,17 @@
 # Change Log
 
-## [1.0.0] - 2016-12-17
+## [2.0.1] - 2017-04-05
 
-Initial release.
+### Fixes
+
+* Fix handling an array of errors coming in from `pg-promise` in `transaction` method.
 
 ## [2.0.0] - 2017-01-02
 
-* __Breaking.__ `DatabaseUnavailable` error extra properties (`address` and `port`) have been moved to the VError's `info` constructor option, so it can be accessed via the static method `VError.info(err)`.
+### Breaking changes
+
+* `DatabaseUnavailable` error extra properties (`address` and `port`) have been moved to the VError's `info` constructor option, so it can be accessed via the static method `VError.info(err)`.
+
+## [1.0.0] - 2016-12-17
+
+Initial release.

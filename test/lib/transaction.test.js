@@ -10,7 +10,7 @@ const getDefaultProtoStub = () => ({
   }
 });
 
-test('transaction >> called without param', t => {
+test('transaction > called without param', t => {
   self.bind(getDefaultProtoStub())()
   .then(() => t.end('should not resolve'))
   .catch(err => {
@@ -19,7 +19,7 @@ test('transaction >> called without param', t => {
   });
 });
 
-test('transaction >> called with param that is not a function', t => {
+test('transaction > called with param that is not a function', t => {
   self.bind(getDefaultProtoStub())('not_a_function')
   .then(() => t.end('should not resolve'))
   .catch(err => {
@@ -28,7 +28,7 @@ test('transaction >> called with param that is not a function', t => {
   });
 });
 
-test('exec-func >> db object is not initialized yet', t => {
+test('transaction > db object is not initialized yet', t => {
   const proto = {
     _db: null
   };
@@ -41,7 +41,27 @@ test('exec-func >> db object is not initialized yet', t => {
   });
 });
 
-test('transaction >> connection to database fails', t => {
+test('transaction > the library call rejects with an array of errors', t => {
+  const ERR_1 = new Error('error1');
+  const ERR_2 = new Error('error2');
+  const proto = {
+    _db: {
+      tx: () => Promise.reject([
+        { result: ERR_1 },
+        { result: ERR_2 }
+      ])
+    }
+  };
+
+  self.bind(proto)(() => {})
+  .then(() => t.end('should not resolve'))
+  .catch(err => {
+    t.equal(err.cause(), ERR_1, 'should take the first error');
+    t.end();
+  });
+});
+
+test('transaction > connection to database fails', t => {
   const proto = {
     _db: {
       tx: () => Promise.reject({ errno: 'ECONNREFUSED' })
@@ -56,7 +76,7 @@ test('transaction >> connection to database fails', t => {
   });
 });
 
-test('transaction >> connection to database timeouts', t => {
+test('transaction > connection to database timeouts', t => {
   const proto = {
     _db: {
       tx: () => Promise.reject({ errno: 'ETIMEDOUT' })
@@ -71,7 +91,7 @@ test('transaction >> connection to database timeouts', t => {
   });
 });
 
-test('transaction >> any other error occurs', t => {
+test('transaction > any other error occurs', t => {
   const proto = {
     _db: {
       tx: () => Promise.reject(new Error('msg'))
