@@ -41,15 +41,16 @@ test('transaction > db object is not initialized yet', t => {
   });
 });
 
-test('transaction > the library call rejects with an array of errors', t => {
+test('transaction > the library call rejects with its custom error', t => {
   const ERR_1 = new Error('error1');
   const ERR_2 = new Error('error2');
   const proto = {
     _db: {
-      tx: () => Promise.reject([
-        { result: ERR_1 },
-        { result: ERR_2 }
-      ])
+      tx: () => Promise.reject({
+        getErrors () {
+          return [ERR_1, ERR_2];
+        }
+      })
     }
   };
 

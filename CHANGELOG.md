@@ -1,5 +1,11 @@
 # Change Log
 
+## [2.0.2] - 2017-04-22
+
+### Fixes
+
+* Fix handling custom errors coming in from `pg-promise` in `transaction` method.
+
 ## [2.0.1] - 2017-04-05
 
 ### Fixes
