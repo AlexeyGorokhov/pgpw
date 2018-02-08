@@ -1,5 +1,10 @@
 # Change Log
 
+## [2.1.0] - 2018-02-08
+
+* Add testing stubs
+* Dependency updates
+
 ## [2.0.2] - 2017-04-22
 
 ### Fixes

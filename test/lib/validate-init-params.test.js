@@ -87,7 +87,7 @@ test(`${moduleName} > "cnDetails.host" is a correct IPv4 address`, t => {
 
 test(`${moduleName} > "cnDetails.host" is a correct IPv6 address`, t => {
   const cnStub = getDefaultCnDetailsStub();
-  cnStub.host = '1:2:3:4';
+  cnStub.host = '1:2:3:4::';
   const fn = () => self('a_string', cnStub);
 
   t.doesNotThrow(fn, TypeError, 'Should not throw');

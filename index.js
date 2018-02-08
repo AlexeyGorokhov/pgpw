@@ -3,6 +3,7 @@
 const validateInitParams = require('./lib/validate-init-params');
 const createDbConnObject = require('./lib/create-db-conn-object');
 const createConn = require('./lib/create-conn');
+const stubs = require('./lib/stubs');
 
 const _databases = new Map();
 
@@ -53,3 +54,5 @@ pgpw.init = function (name, cnDetails) {
     _databases.set(name, createDbConnObject(cnDetails));
   }
 };
+
+pgpw.stubs = stubs;

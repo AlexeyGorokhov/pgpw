@@ -7,18 +7,21 @@ const sinon = require('sinon');
 const getDefaultStubs = () => ({
   validateInitParamsStub: sinon.spy(),
   createDbConnObjectStub: sinon.spy(() => ({ _db: {} })),
-  createConnStub: sinon.spy()
+  createConnStub: sinon.spy(),
+  stubsStub: () => {}
 });
 
 const getSelf = ({
   validateInitParamsStub,
   createDbConnObjectStub,
-  createConnStub
+  createConnStub,
+  stubsStub
 }) => {
   const self = proxyquire('../index', {
     './lib/validate-init-params': validateInitParamsStub,
     './lib/create-db-conn-object': createDbConnObjectStub,
-    './lib/create-conn': createConnStub
+    './lib/create-conn': createConnStub,
+    './lib/stubs': stubsStub
   });
 
   return self;
