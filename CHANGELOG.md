@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.2.0] - 2018-02-08
+
+* Allow to pass an array of stubs
+
 ## [2.1.0] - 2018-02-08
 
 * Add testing stubs

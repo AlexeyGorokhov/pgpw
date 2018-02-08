@@ -135,10 +135,12 @@ Returns function to be used in place of "required" `pgpw` module.
 
 Generally, you don't need to call this function directly - it will be called by the require proxy you use in you test suit (think of [proxyquire](https://www.npmjs.com/package/proxyquire)). When called returns an object with the following keys:
 
-* `{Function} execFunc()` - default or custom stub for `db.execFunc(...)` method;
-* `{Function} transaction()` - default or custom stub for `db.transaction(...)` method.
+* `{Function|Array<Function>} execFunc` - default or custom stub/stubs for `db.execFunc(...)` method;
+* `{Function|Array<Function>} transaction` - default or custom stub/stubs for `db.transaction(...)` method.
 
 You can pass your custom stubs through the optional parameter `customStubs` which accepts an object with keys `execFunc` and `transaction`. All keys are optional. For every key that is not provided, the default stub is returned. Default stub returns `Promise` that resolves with `null`.
+
+If you pass an array of stubs to either `execFunc` of `transaction`, these stubs will be executed sequentially on sequential calls to the relevant method in your production code. If your production code calls a method more times that the number of stubs in the array, the last stub is executed on all subsequent calls.
 
 
 ### Usage Example
@@ -146,13 +148,23 @@ You can pass your custom stubs through the optional parameter `customStubs` whic
 Say you want to unit test the following module:
 
 ```js
+/* my-module.js */
+
 const db = require('pgpw')('my_db_name');
 
 module.exports = async function retrieveDataFromDb () {
-  const queryResult = await db.execFunc('func_name', ['param1', 'param2']);
+  const [ resultOne, resultTwo ] = await Promise.all([
+    db.execFunc('func_1', ['param1', 'param2']),
+    db.execFunc('func_2', ['param3', 'param4'])
+  ]);
+
+  const [ resultTree, resultFour ] = await db.transaction(t => t.batch([
+    t.func('func_3', ['param5']),
+    t.func('func_4', ['param6'])
+  ]));
 
   // Logic to test
-  if (queryResult.length) {
+  if (resultOne.length && resultTwo.length && resultTree.length && resultFour.length) {
     return 'foo';
   } else {
     return 'bar';
@@ -168,15 +180,27 @@ const proxyquire = require('proxyquire').noPreserveCache();
 const dbStub = require('pgpw').stubs;
 
 const getSelf = ({
-  execFuncStub = () => Promise.resolve([])
+  execFuncStub = [
+    () => Promise.resolve([]),
+    () => Promise.resolve([''])
 } = {}) => proxyquire('./my-module', {
   'pgpw': dbStub({ execFunc: execFuncStub })
 });
 
-test('query returns data', async t => {
+test('all queries return data', async t => {
   try {
-    const execFuncStub = () => Promise.resolve(['item1', 'item2']);
-    const self = getSelf({ execFuncStub });
+    const self = proxyquire('./my-module', {
+      'pgpw': dbStub({
+        execFunc: [
+          () => Promise.resolve(['item1', 'item2']),
+          () => Promise.resolve(['item3', 'item4'])
+        ],
+        transaction: () => Promise.resolve([
+          ['item5', 'item6'],
+          ['item7', 'item8']
+        ])
+      })
+    });
 
     const result = await self();
 
