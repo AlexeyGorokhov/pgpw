@@ -22,7 +22,6 @@
     "tape": "^4.6.3"
   },
   "dependencies": {
-    "is-ip": "^2.0.0",
     "pg-promise": "^7.4.1",
     "verror": "^1.9.0"
   },
