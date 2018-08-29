@@ -50,59 +50,6 @@ test(`${moduleName} > missing "cnDetails.host" prop`, t => {
   t.end();
 });
 
-test(`${moduleName} > "cnDetails.host" is not a correct IPv4 address format`, t => {
-  const cnStub = getDefaultCnDetailsStub();
-  cnStub.host = '123.234.2';
-  const fn = () => self('a_string', cnStub);
-
-  t.throws(fn, TypeError, 'Should throw a TypeError');
-  t.end();
-});
-
-test(`${moduleName} > "cnDetails.host" is not a correct IPv4 address`, t => {
-  const cnStub = getDefaultCnDetailsStub();
-  cnStub.host = '145.342.345.2';
-  const fn = () => self('a_string', cnStub);
-
-  t.throws(fn, TypeError, 'Should throw a TypeError');
-  t.end();
-});
-
-test(`${moduleName} > "cnDetails.host" is not a correct IPv6 address format`, t => {
-  const cnStub = getDefaultCnDetailsStub();
-  cnStub.host = '1:2:t:4';
-  const fn = () => self('a_string', cnStub);
-
-  t.throws(fn, TypeError, 'Should throw a TypeError');
-  t.end();
-});
-
-test(`${moduleName} > "cnDetails.host" is a correct IPv4 address`, t => {
-  const cnStub = getDefaultCnDetailsStub();
-  const fn = () => self('a_string', cnStub);
-
-  t.doesNotThrow(fn, TypeError, 'Should not throw');
-  t.end();
-});
-
-test(`${moduleName} > "cnDetails.host" is a correct IPv6 address`, t => {
-  const cnStub = getDefaultCnDetailsStub();
-  cnStub.host = '1:2:3:4::';
-  const fn = () => self('a_string', cnStub);
-
-  t.doesNotThrow(fn, TypeError, 'Should not throw');
-  t.end();
-});
-
-test(`${moduleName} > "cnDetails.host" is "localhost"`, t => {
-  const cnStub = getDefaultCnDetailsStub();
-  cnStub.host = 'localhost';
-  const fn = () => self('a_string', cnStub);
-
-  t.doesNotThrow(fn, TypeError, 'Should not throw');
-  t.end();
-});
-
 test(`${moduleName} > missing "cnDetails.port" prop`, t => {
   const cnStub = getDefaultCnDetailsStub();
   delete cnStub.port;
