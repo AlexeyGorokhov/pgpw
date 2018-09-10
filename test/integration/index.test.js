@@ -139,6 +139,35 @@ test('transaction call with partial mode configuration', async t => {
   }
 });
 
+test('transaction breaking read-only rule', async t => {
+  try {
+    const transactionMode = {
+      isReadOnly: true
+    };
+    const implementor = tx => tx.batch([
+      tx.func('pgpw_test.get_one_by_id', ['5db1e0ba-6342-463f-bdbb-ebb4b9551e54']),
+      tx.func('pgpw_test.pgpw_test.add_two', [
+        '7c22d11a-7d54-40f3-a24a-a41527c4d463',
+        '5db1e0ba-6342-463f-bdbb-ebb4b9551e54',
+        'foo'
+      ])
+    ]);
+
+    await db.transaction(transactionMode, implementor);
+
+    t.end(new Error('expected to throw'));
+  } catch (err) {
+    console.log(err);
+    t.equal(
+      err.name,
+      'UnexpectedError',
+      'should throw UnexpectedError'
+    );
+
+    t.end();
+  }
+});
+
 test('exit', t => {
   t.end();
   process.exit(0);
