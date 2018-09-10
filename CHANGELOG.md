@@ -1,5 +1,22 @@
 # Change Log
 
+
+## [3.0.0] - 2018-09-10
+
+### Breaking Changes
+
+#### Upgrade underlying `pg-promise` library to v8
+
+In v8, `pg-promise` library no longer supports callback function modifications for transactions and tasks. In its method `db.transaction(implementor)`, `pgpw` allowed `implementor` to use original `pg-promise`'s methods `t.tx()` and `t.task()` which now have changed their signatures. So, we have been forced to bump the major version of `pgpw`.
+
+### Non-breaking Changes
+
+* Add transaction mode settings as an optional parameter to `db.transaction()`.
+
+
+
+
+
 ## [2.2.0] - 2018-02-08
 
 * Allow to pass an array of stubs

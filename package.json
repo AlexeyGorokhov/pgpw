@@ -1,11 +1,12 @@
 {
   "name": "pgpw",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "description": "Opinionated wrapper around pg-promise library",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/semistandard --verbose | ./node_modules/.bin/snazzy && node_modules/.bin/tape 'test/**/*.js' | tap-summary",
-    "test:dev": "node_modules/.bin/tape 'test/**/*.js' | tap-summary"
+    "test": "./node_modules/.bin/semistandard --verbose | ./node_modules/.bin/snazzy && ./node_modules/.bin/tape 'test/unit/**/*.js' | tap-summary",
+    "test:dev": "./node_modules/.bin/tape 'test/unit/**/*.js' | tap-summary",
+    "test:integration": "bash ./test/integration/run-tests.sh"
   },
   "author": {
     "name": "Alexey Gorokhov",
@@ -14,15 +15,15 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "proxyquire": "^1.7.10",
-    "semistandard": "^12.0.0",
-    "sinon": "^4.2.2",
-    "snazzy": "^7.0.0",
+    "proxyquire": "^2.1.0",
+    "semistandard": "^12.0.1",
+    "sinon": "^6.2.0",
+    "snazzy": "^8.0.0",
     "tap-summary": "^4.0.0",
-    "tape": "^4.6.3"
+    "tape": "^4.9.1"
   },
   "dependencies": {
-    "pg-promise": "^7.4.1",
+    "pg-promise": "^8.4.6",
     "verror": "^1.9.0"
   },
   "keywords": [

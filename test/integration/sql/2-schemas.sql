@@ -1,0 +1,1 @@
+CREATE SCHEMA pgpw_test AUTHORIZATION postgres;

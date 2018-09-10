@@ -2,7 +2,7 @@
 
 const test = require('tape');
 
-const self = require('../../lib/stubs');
+const self = require('../../../lib/stubs');
 
 test('passed no params', async t => {
   try {
