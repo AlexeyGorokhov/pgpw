@@ -23,7 +23,7 @@
     "tape": "^4.9.1"
   },
   "dependencies": {
-    "pg-promise": "^7.4.1",
+    "pg-promise": "^8.4.6",
     "verror": "^1.9.0"
   },
   "keywords": [
