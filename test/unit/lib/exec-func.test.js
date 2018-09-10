@@ -2,7 +2,7 @@
 
 const test = require('tape');
 
-const self = require('../../lib/exec-func');
+const self = require('../../../lib/exec-func');
 
 const getDefaultProtoStub = () => ({
   _db: {

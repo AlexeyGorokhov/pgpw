@@ -17,7 +17,7 @@ const getSelf = ({
   createConnStub,
   stubsStub
 }) => {
-  const self = proxyquire('../index', {
+  const self = proxyquire('../../index', {
     './lib/validate-init-params': validateInitParamsStub,
     './lib/create-db-conn-object': createDbConnObjectStub,
     './lib/create-conn': createConnStub,

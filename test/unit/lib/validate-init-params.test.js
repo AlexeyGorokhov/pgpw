@@ -2,7 +2,7 @@
 
 const test = require('tape');
 
-const self = require('../../lib/validate-init-params');
+const self = require('../../../lib/validate-init-params');
 const moduleName = 'lib/validate-init-params.js';
 
 const getDefaultCnDetailsStub = () => ({
