@@ -157,7 +157,6 @@ test('transaction breaking read-only rule', async t => {
 
     t.end(new Error('expected to throw'));
   } catch (err) {
-    console.log(err);
     t.equal(
       err.name,
       'UnexpectedError',
@@ -166,9 +165,4 @@ test('transaction breaking read-only rule', async t => {
 
     t.end();
   }
-});
-
-test('exit', t => {
-  t.end();
-  process.exit(0);
 });

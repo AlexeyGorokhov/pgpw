@@ -4,8 +4,11 @@ const test = require('tape');
 const proxyquire = require('proxyquire').noPreserveCache().noCallThru();
 const sinon = require('sinon');
 
+const mn = 'index.js';
+
 const getDefaultStubs = () => ({
   validateInitParamsStub: sinon.spy(),
+  validateGlobalRetryOptionsStub: sinon.spy(() => ({})),
   createDbConnObjectStub: sinon.spy(() => ({ _db: {} })),
   createConnStub: sinon.spy(),
   stubsStub: () => {}
@@ -13,12 +16,14 @@ const getDefaultStubs = () => ({
 
 const getSelf = ({
   validateInitParamsStub,
+  validateGlobalRetryOptionsStub,
   createDbConnObjectStub,
   createConnStub,
   stubsStub
 }) => {
   const self = proxyquire('../../index', {
     './lib/validate-init-params': validateInitParamsStub,
+    './lib/validate-global-retry-options': validateGlobalRetryOptionsStub,
     './lib/create-db-conn-object': createDbConnObjectStub,
     './lib/create-conn': createConnStub,
     './lib/stubs': stubsStub
@@ -35,7 +40,7 @@ const getCnDetailsStub = () => ({
   password: ''
 });
 
-test('index >> called with db name that does not exist', t => {
+test(`${mn} > called with db name that does not exist`, t => {
   const stubs = getDefaultStubs();
   stubs.createDbConnObjectStub = sinon.spy(() => ({ _db: null }));
   const self = getSelf(stubs);
@@ -56,7 +61,7 @@ test('index >> called with db name that does not exist', t => {
   t.end();
 });
 
-test('index >> called with existing db name', t => {
+test(`${mn} > called with existing db name`, t => {
   const stubs = getDefaultStubs();
   stubs.createDbConnObjectStub = sinon.spy(() => ({ _db: {} }));
   const self = getSelf(stubs);
@@ -73,7 +78,7 @@ test('index >> called with existing db name', t => {
   t.end();
 });
 
-test('index > init > called with a name of none-existing db object', t => {
+test(`${mn} > init > called with a name of none-existing db object`, t => {
   const stubs = getDefaultStubs();
   const self = getSelf(stubs);
   const cnDetailsStub = getCnDetailsStub();
@@ -85,15 +90,23 @@ test('index > init > called with a name of none-existing db object', t => {
     true,
     'should call parameters validator'
   );
+
+  t.equal(
+    stubs.validateGlobalRetryOptionsStub.called,
+    true,
+    'should call retry options validator'
+  );
+
   t.deepEqual(
     stubs.createDbConnObjectStub.getCall(0).args[0],
     cnDetailsStub,
     'should call for db object creation with connection details'
   );
+
   t.end();
 });
 
-test('index > init > called with a name of existing and initialized db name', t => {
+test(`${mn} > init > called with a name of existing and initialized db name`, t => {
   const stubs = getDefaultStubs();
   const self = getSelf(stubs);
   const cnDetailsStub = getCnDetailsStub();
@@ -107,7 +120,7 @@ test('index > init > called with a name of existing and initialized db name', t 
   t.end();
 });
 
-test('index > init > called with a name of existing but uninitialized db name', t => {
+test(`${mn} > init > called with a name of existing but uninitialized db name`, t => {
   const stubs = getDefaultStubs();
   stubs.createDbConnObjectStub = sinon.spy(() => ({ _db: null }));
   const self = getSelf(stubs);
@@ -122,15 +135,24 @@ test('index > init > called with a name of existing but uninitialized db name', 
     true,
     'should call parameters validator'
   );
+
+  t.equal(
+    stubs.validateGlobalRetryOptionsStub.called,
+    true,
+    'should call retry options validator'
+  );
+
   t.equal(
     stubs.createDbConnObjectStub.calledOnce,
     true,
     'should not call for db object creation at the second invocation'
   );
+
   t.deepEqual(
     stubs.createConnStub.getCall(0).args[0],
     cnDetailsStub,
     'should call for connection creation with connection details'
   );
+
   t.end();
 });
