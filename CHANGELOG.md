@@ -1,5 +1,18 @@
 # Change Log
 
+## [4.0.0] - 2019-03-22
+
+### New Features
+
+V4 comes with both `execFunc` and `transaction` methods implementing user-defined retry strategy. Adding this functionality has involved significant changes to the codebase. Although this module is thoroughly covered with tests, the author has decided to bump the major version in order for providing smoother experience for those who still believe in the idea of semver and don't lock their dependencies.
+
+### Other changes
+
+* Upgrade dev dependencies
+
+
+
+
 
 ## [3.0.0] - 2018-09-10
 
@@ -9,7 +22,7 @@
 
 In v8, `pg-promise` library no longer supports callback function modifications for transactions and tasks. In its method `db.transaction(implementor)`, `pgpw` allowed `implementor` to use original `pg-promise`'s methods `t.tx()` and `t.task()` which now have changed their signatures. So, we have been forced to bump the major version of `pgpw`.
 
-### Non-breaking Changes
+### New Features
 
 * Add transaction mode settings as an optional parameter to `db.transaction()`.
 

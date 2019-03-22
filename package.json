@@ -1,23 +1,22 @@
 {
   "name": "pgpw",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Opinionated wrapper around pg-promise library",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/semistandard --verbose | ./node_modules/.bin/snazzy && ./node_modules/.bin/tape 'test/unit/**/*.js' | tap-summary",
-    "test:dev": "./node_modules/.bin/tape 'test/unit/**/*.js' | tap-summary",
+    "test": "./node_modules/.bin/semistandard --verbose | ./node_modules/.bin/snazzy && ./node_modules/.bin/tape 'test/unit/**/*.test.js' | tap-summary",
+    "test:dev": "./node_modules/.bin/tape 'test/unit/**/*.test.js' | tap-summary",
     "test:integration": "bash ./test/integration/run-tests.sh"
   },
   "author": {
     "name": "Alexey Gorokhov",
-    "email": "alexey.gorokhov@icloud.com",
-    "url": ""
+    "email": "alexey.gorokhov@icloud.com"
   },
   "license": "MIT",
   "devDependencies": {
     "proxyquire": "^2.1.0",
-    "semistandard": "^12.0.1",
-    "sinon": "^6.2.0",
+    "semistandard": "^13.0.1",
+    "sinon": "^7.2.4",
     "snazzy": "^8.0.0",
     "tap-summary": "^4.0.0",
     "tape": "^4.9.1"

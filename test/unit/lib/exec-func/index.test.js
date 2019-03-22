@@ -4,18 +4,16 @@ const test = require('tape');
 const proxyquire = require('proxyquire').noPreserveCache().noCallThru();
 const sinon = require('sinon');
 
-const mn = 'lib/transaction/index.js';
+const mn = 'lib/exec-func/index.js';
 
 const getSelf = (stubs = {}) => {
   const {
-    processArgsStub = () => ({}),
     validateLocalRetryOptionsStub = () => ({}),
     defaultRetryOptionsStub = {},
     executeStub = () => Promise.resolve()
   } = stubs;
 
-  return proxyquire('../../../../lib/transaction', {
-    './process-args': processArgsStub,
+  return proxyquire('../../../../lib/exec-func', {
     '../validate-local-retry-options': validateLocalRetryOptionsStub,
     '../default-retry-options': defaultRetryOptionsStub,
     './execute': executeStub
@@ -23,28 +21,49 @@ const getSelf = (stubs = {}) => {
 };
 
 const getDefaultProtoStub = () => ({
-  _db: {},
+  _db: {
+    func: () => Promise.resolve()
+  },
   retryOptions: {}
 });
 
-test(`${mn} > normal scenario`, async t => {
+test(`${mn} > called without params`, async t => {
   try {
-    const protoStub = getDefaultProtoStub();
-    const stubs = {
-      executeStub: sinon.spy(() => Promise.resolve())
-    };
-
-    await getSelf(stubs).bind(protoStub)();
-
-    t.equal(
-      stubs.executeStub.called,
-      true,
-      'should call execution'
-    );
-
-    t.end();
+    await getSelf().bind(getDefaultProtoStub())();
+    t.end('should not resolve');
   } catch (err) {
-    t.end(err);
+    t.equal(err instanceof TypeError, true, 'should reject with a TypeError');
+    t.end();
+  }
+});
+
+test(`${mn} > called with "name" param that is not a string`, async t => {
+  try {
+    await getSelf().bind(getDefaultProtoStub())(['not_a_string']);
+    t.end('should not resolve');
+  } catch (err) {
+    t.equal(err instanceof TypeError, true, 'should reject with a TypeError');
+    t.end();
+  }
+});
+
+test(`${mn} > called with "name" param that is an empty string`, async t => {
+  try {
+    await getSelf().bind(getDefaultProtoStub())('');
+    t.end('should not resolve');
+  } catch (err) {
+    t.equal(err instanceof TypeError, true, 'should reject with a TypeError');
+    t.end();
+  }
+});
+
+test(`${mn} > called with "params" param that is not an Array`, async t => {
+  try {
+    await getSelf().bind(getDefaultProtoStub())('some_name', 'not_an_array');
+    t.end('should not resolve');
+  } catch (err) {
+    t.equal(err instanceof TypeError, true, 'should reject with a TypeError');
+    t.end();
   }
 });
 
@@ -56,7 +75,6 @@ test(`${mn} > db object is not initialized yet`, async t => {
     };
 
     await getSelf().bind(proto)('some_name', []);
-
     t.end('should not resolve');
   } catch (err) {
     t.equal(err instanceof Error, true, 'should reject with a Error');
@@ -73,7 +91,6 @@ test(`${mn} > validation of local retry options fails`, async t => {
     };
 
     await getSelf(stubs).bind(getDefaultProtoStub())('some_name', []);
-
     t.end('should not resolve');
   } catch (err) {
     t.equal(
