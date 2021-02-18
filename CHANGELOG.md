@@ -1,5 +1,13 @@
 # Change Log
 
+## [5.0.0] - 2021-02-18
+
+* Upgrade underlying `pg-promise` library to v10
+
+
+
+
+
 ## [4.0.0] - 2019-03-22
 
 ### New Features
