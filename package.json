@@ -1,6 +1,6 @@
 {
   "name": "pgpw",
-  "version": "4.0.0",
+  "version": "0.0.0",
   "description": "Opinionated wrapper around pg-promise library",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "tape": "^4.9.1"
   },
   "dependencies": {
-    "pg-promise": "^8.4.6",
+    "pg-promise": "^10.9.2",
     "verror": "^1.9.0"
   },
   "keywords": [
